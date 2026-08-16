@@ -14,6 +14,7 @@ const initialAlumniForm = {
   email: "",
   password: "",
 };
+const initialAdminForm = { adminId: "", password: "" };
 
 const quickStats = [
   { value: "2K+", label: "Alumni network" },
@@ -43,6 +44,7 @@ export function LandingPage() {
   const [mode, setMode] = useState("choice");
   const [studentForm, setStudentForm] = useState(initialStudentForm);
   const [alumniForm, setAlumniForm] = useState(initialAlumniForm);
+  const [adminForm, setAdminForm] = useState(initialAdminForm);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [theme, setTheme] = useState(() => localStorage.getItem("alumniconnect-theme") || "light");
@@ -92,6 +94,14 @@ export function LandingPage() {
     }
   }
 
+  async function handleAdminLogin(event) {
+    event.preventDefault(); setSubmitting(true); setError("");
+    try {
+      const response = await apiRequest("/auth/admin/login", { method: "POST", body: adminForm });
+      setSession(response); navigate("/admin");
+    } catch (requestError) { setError(requestError.message); } finally { setSubmitting(false); }
+  }
+
   return (
     <div className="landing-page">
       <PublicHeader
@@ -133,6 +143,7 @@ export function LandingPage() {
                     navigate("/alumni-portal");
                     return;
                   }
+                  if (user?.role === "admin") { navigate("/admin"); return; }
 
                   setIsModalOpen(true);
                 }}
@@ -202,6 +213,9 @@ export function LandingPage() {
                 </button>
                 <button type="button" className="primary-button" onClick={() => setMode("alumni")}>
                   Alumni Login
+                </button>
+                <button type="button" className="primary-button" onClick={() => setMode("admin")}>
+                  Admin Login
                 </button>
               </div>
             )}
@@ -273,6 +287,17 @@ export function LandingPage() {
                 <button type="button" className="text-button" onClick={() => setMode("choice")}>
                   Back
                 </button>
+              </form>
+            )}
+
+            {mode === "admin" && (
+              <form className="stack-gap" onSubmit={handleAdminLogin}>
+                <h3>Login</h3>
+                <input placeholder="Admin ID" value={adminForm.adminId} onChange={(event) => setAdminForm((current) => ({ ...current, adminId: event.target.value }))} required />
+                <input type="password" placeholder="Password" value={adminForm.password} onChange={(event) => setAdminForm((current) => ({ ...current, password: event.target.value }))} required />
+                {error ? <p className="error-text">{error}</p> : null}
+                <button type="submit" className="primary-button" disabled={submitting}>{submitting ? "Signing in..." : "Login"}</button>
+                <button type="button" className="text-button" onClick={() => setMode("choice")}>Back</button>
               </form>
             )}
           </div>

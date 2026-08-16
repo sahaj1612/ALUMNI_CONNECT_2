@@ -3,6 +3,7 @@ import { Student } from "../models/Student.js";
 import { ApiError } from "../utils/apiError.js";
 import { createToken } from "../utils/auth.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { env } from "../config/env.js";
 
 function createAuthPayload({ role, identifier, profile }) {
   return {
@@ -72,7 +73,33 @@ export const loginAlumni = asyncHandler(async (req, res) => {
   );
 });
 
+export const loginAdmin = asyncHandler(async (req, res) => {
+  const { adminId, password } = req.body;
+  if (!adminId || !password) {
+    throw new ApiError(400, "Admin ID and password are required.");
+  }
+
+  if (adminId.trim().toLowerCase() !== env.adminId.toLowerCase() || password !== env.adminPassword) {
+    throw new ApiError(401, "Invalid admin credentials.");
+  }
+
+  res.json(createAuthPayload({
+    role: "admin",
+    identifier: env.adminId,
+    profile: { name: "Administrator", email: env.adminId },
+  }));
+});
+
 export const getCurrentUser = asyncHandler(async (req, res) => {
+  if (req.user.role === "admin") {
+    if (req.user.identifier !== env.adminId) {
+      throw new ApiError(401, "Session expired. Please log in again.");
+    }
+    return res.json({
+      user: { role: "admin", identifier: env.adminId, name: "Administrator", email: env.adminId },
+    });
+  }
+
   const profile =
     req.user.role === "student"
       ? await Student.findOne({ usn: req.user.identifier }).lean()

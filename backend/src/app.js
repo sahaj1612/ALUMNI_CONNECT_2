@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { env } from "./config/env.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import alumniRoutes from "./routes/alumniRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import detailsRoutes from "./routes/detailsRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
@@ -61,6 +62,7 @@ export function createApp() {
   app.use("/api/auth", authRoutes);
   app.use("/api/student", studentRoutes);
   app.use("/api/alumni", alumniRoutes);
+  app.use("/api/admin", adminRoutes);
   app.use("/api/details", detailsRoutes);
 
   if (fs.existsSync(clientDistPath)) {

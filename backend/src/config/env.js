@@ -17,4 +17,6 @@ export const env = {
     process.env.MONGODB_URI || "mongodb://localhost:27017/alumniConnectDB",
   jwtSecret: process.env.JWT_SECRET || "change-me-in-production",
   clientUrls: parseClientUrls(),
+  adminId: process.env.ADMIN_ID || "admin@sdmcet.edu",
+  adminPassword: process.env.ADMIN_PASSWORD || "Admin@1234",
 };

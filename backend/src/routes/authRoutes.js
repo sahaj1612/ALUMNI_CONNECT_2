@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getCurrentUser,
+  loginAdmin,
   loginAlumni,
   loginStudent,
 } from "../controllers/authController.js";
@@ -10,6 +11,7 @@ const router = Router();
 
 router.post("/student/login", loginStudent);
 router.post("/alumni/login", loginAlumni);
-router.get("/me", requireAuth(["student", "alumni"]), getCurrentUser);
+router.post("/admin/login", loginAdmin);
+router.get("/me", requireAuth(["student", "alumni", "admin"]), getCurrentUser);
 
 export default router;

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import { AlumniPortalPage } from "./pages/AlumniPortalPage.jsx";
+import { AdminPortalPage } from "./pages/AdminPortalPage.jsx";
 import { AboutPage } from "./pages/AboutPage.jsx";
 import { AlumniInfoPage } from "./pages/AlumniInfoPage.jsx";
 import { DetailPage } from "./pages/DetailPage.jsx";
@@ -33,6 +34,14 @@ export default function App() {
         element={
           <ProtectedRoute role="alumni">
             <AlumniPortalPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute role="admin">
+            <AdminPortalPage />
           </ProtectedRoute>
         }
       />

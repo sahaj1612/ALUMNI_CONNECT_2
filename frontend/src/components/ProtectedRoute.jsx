@@ -13,7 +13,7 @@ export function ProtectedRoute({ children, role }) {
   }
 
   if (role && user.role !== role) {
-    return <Navigate to={user.role === "alumni" ? "/alumni-portal" : "/student"} replace />;
+    return <Navigate to={user.role === "admin" ? "/admin" : user.role === "alumni" ? "/alumni-portal" : "/student"} replace />;
   }
 
   return children;

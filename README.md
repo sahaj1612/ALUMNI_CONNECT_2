@@ -16,6 +16,8 @@ ALUMNI_CONNECT/
 - Public pages for About SDMCET, Alumni Association, Events, and Support.
 - Student login with USN, email, and password.
 - Alumni login with email and password.
+- Single administrator login with a protected account-management dashboard.
+- Administrator tools to search, add, edit, and remove student and alumni accounts.
 - Protected student portal and alumni portal.
 - Student dashboard for viewing jobs, events, notifications, and profile details.
 - Alumni dashboard for managing profile data and posting jobs or events.
@@ -86,6 +88,8 @@ MONGODB_URI=mongodb://localhost:27017/alumniConnectDB
 JWT_SECRET=change-me-in-production
 CLIENT_URL=http://localhost:5173
 CLIENT_URLS=http://localhost:5173,http://127.0.0.1:5173
+ADMIN_ID=admin@sdmcet.edu
+ADMIN_PASSWORD=Admin@1234
 ```
 
 Create `frontend/.env` from `frontend/.env.example` if you need to override the API URL:
@@ -143,6 +147,13 @@ npm start
 - Email: `sahaj.ssh16@gmail.com`
 - Password: `1234`
 
+### Administrator (only one account)
+
+- Admin ID: `admin@sdmcet.edu`
+- Password: `Admin@1234`
+
+The administrator account is configured through `ADMIN_ID` and `ADMIN_PASSWORD` in `backend/.env`; it is not stored as a MongoDB record, so no additional admin accounts can be created. Change these values before production deployment.
+
 ## Important Routes
 
 ### Public Pages
@@ -157,6 +168,7 @@ npm start
 
 - `/student` - Student portal
 - `/alumni-portal` - Alumni portal
+- `/admin` - Administrator account-management dashboard
 - `/details/:type/:id` - Job or event details
 
 ## Backend Notes
@@ -173,6 +185,7 @@ npm start
 - `/api/auth` - Student and alumni authentication
 - `/api/student` - Student portal, profile, jobs, events, applications, and notifications
 - `/api/alumni` - Alumni portal, profile, job/event management, applications, and notifications
+- `/api/admin` - Administrator-only account management for students and alumni
 - `/api/details` - Shared job and event detail lookup
 
 ## Notes
